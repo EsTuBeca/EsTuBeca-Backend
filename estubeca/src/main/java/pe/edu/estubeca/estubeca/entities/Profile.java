@@ -22,21 +22,23 @@ public class Profile {
     private String lastName;
     @Column(name="phone", length=9, nullable = false)
     private String phone;
-    @Column(name= "imgUrl")
-    private String imgUrl;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name= "picture")
+    private byte[] picture;
     @Column(name="grade", length=100, nullable = false)
     private String grade;
 
 
     public Profile(){}
 
-    public Profile(Long id, User user, String name, String lastName, String phone, String imgUrl, String grade) {
+    public Profile(Long id, User user, String name, String lastName, String phone, byte[] picture, String grade) {
         this.id = id;
         this.user = user;
         this.name = name;
         this.lastName = lastName;
         this.phone = phone;
-        this.imgUrl = imgUrl;
+        this.picture = picture;
         this.grade = grade;
     }
 
@@ -80,12 +82,12 @@ public class Profile {
         this.phone = phone;
     }
 
-    public String getImgUrl() {
-        return imgUrl;
+    public byte[] getPicture() {
+        return picture;
     }
 
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
+    public void setPicture(byte[] picture) {
+        this.picture = picture;
     }
 
     public String getGrade() {
@@ -103,7 +105,6 @@ public class Profile {
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
-                ", imgUrl='" + imgUrl + '\'' +
                 ", grade='" + grade + '\'' +
                 '}';
     }
