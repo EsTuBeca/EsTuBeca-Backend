@@ -2,6 +2,7 @@ package pe.edu.estubeca.estubeca.entities;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 
@@ -22,7 +23,8 @@ public class Profile {
     private String lastName;
     @Column(name="phone", length=9, nullable = false)
     private String phone;
-    @Lob
+    /*@Lob*/
+
     @Basic(fetch = FetchType.LAZY)
     @Column(name= "picture")
     private byte[] picture;

@@ -58,6 +58,35 @@ public class ProfileController {
         return new ResponseEntity<Profile>(profile,HttpStatus.OK);
     }
 
+    //PUT=>http:localthost:8080/api/profiles/1
+    @PutMapping("/profiles/{id}")
+    @Transactional
+    public ResponseEntity<Profile> updateProfile(@RequestParam("picture") MultipartFile picture,
+                                                 @RequestParam("userId") Long userId,
+                                                 @RequestParam("name") String name,
+                                                 @RequestParam("lastname") String lastname,
+                                                 @RequestParam("phone") String phone,
+                                                 @RequestParam("grade") String grade) throws IOException {
+
+        Profile profile = new Profile();
+        profile.setName(name);
+        profile.setLastName(lastname);
+        profile.setPhone(phone);
+        profile.setGrade(grade);
+        profile.setPicture(Util.compressZLib(picture.getBytes()));
+
+        Profile profileUpdate= profileRepository.findById(userId)
+                .orElseThrow(()-> new ResourceNotFoundException("Not found profile with id="+userId));
+
+        profileUpdate.setName(profile.getName());
+        profileUpdate.setLastName(profile.getLastName());
+        profileUpdate.setPhone(profile.getPhone());
+        profileUpdate.setGrade(profile.getGrade());
+        profileUpdate.setPicture(Util.compressZLib(picture.getBytes()));
+
+        return new ResponseEntity<Profile>(profileRepository.save(profileUpdate),
+                HttpStatus.OK);
+    }
     @PostMapping("/profiles")
     @Transactional
     public ResponseEntity<Profile> createProfile(@RequestParam("picture") MultipartFile picture,
@@ -73,7 +102,7 @@ public class ProfileController {
         profile.setGrade(grade);
         profile.setPicture(Util.compressZLib(picture.getBytes()));
 
-        //TODO: búsqueda del userid para estableceren el objeto de profile
+        //TODO: búsqueda del userid para establecer en el objeto de profile
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found user with id="+userId));
 
